@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Certificate - Bitcoin Dada{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="text-center mb-5">
+            <h1 class="display-5 text-primary">
+                <i class="fas fa-upload me-2"></i>
+                Upload Certificate
+            </h1>
+            <p class="lead">Upload a certificate JSON file to verify its authenticity</p>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('upload_verify') }}" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="file" class="form-label">Certificate JSON File</label>
+                        <input type="file" class="form-control" id="file" name="file" 
+                               accept=".json" required>
+                        <div class="form-text">
+                            Upload a JSON file containing certificate data and signature
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-search me-2"></i>
+                        Upload & Verify
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card mt-4 border-warning">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0">
+                    <i class="fas fa-info-circle me-2"></i>
+                    File Format
+                </h5>
+            </div>
+            <div class="card-body">
+                <p>The JSON file should contain:</p>
+                <pre class="code-block">{
+    "id": "certificate-uuid",
+    "data": {
+        "name": "Student Name",
+        "course": "Course Name", 
+        "cohort": "Cohort Name",
+        "issued_at": "2024-01-01 12:00:00 UTC"
+    },
+    "signature": "base64-signature"
+}</pre>
+                <p class="mb-0 text-muted small">
+                    You can export this data from the admin dashboard or extract it from a certificate PDF.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

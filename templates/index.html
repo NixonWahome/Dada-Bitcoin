@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% block title %}Issue Certificates - Bitcoin Dada{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="text-center mb-5">
+            <h1 class="display-4 text-primary">
+                <i class="fas fa-certificate me-3"></i>
+                Certificate Issuance
+            </h1>
+            <p class="lead">Issue secure, verifiable digital certificates for Bitcoin Dada students</p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="row mb-5">
+            <div class="col-md-4">
+                <div class="card text-white bg-success h-100">
+                    <div class="card-body text-center">
+                        <h3>{{ stats.total }}</h3>
+                        <p class="mb-0">Total Certificates</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-white bg-primary h-100">
+                    <div class="card-body text-center">
+                        <h3>{{ stats.active }}</h3>
+                        <p class="mb-0">Active Certificates</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-white bg-warning h-100">
+                    <div class="card-body text-center">
+                        <h3>{{ stats.revoked }}</h3>
+                        <p class="mb-0">Revoked Certificates</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Single Certificate Form -->
+            <div class="col-lg-6">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0">
+                            <i class="fas fa-user-graduate me-2"></i>
+                            Single Certificate
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="{{ url_for('issue') }}">
+                            <input type="hidden" name="token" value="{{ token }}">
+                            
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Student Name *</label>
+                                <input type="text" class="form-control" id="name" name="name" required 
+                                       placeholder="Enter full name">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="course" class="form-label">Course</label>
+                                <input type="text" class="form-control" id="course" name="course" 
+                                       placeholder="e.g., Bitcoin Development">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="cohort" class="form-label">Cohort</label>
+                                <input type="text" class="form-control" id="cohort" name="cohort" 
+                                       placeholder="e.g., Cohort 2024">
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-download me-2"></i>
+                                Generate Certificate
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bulk Certificate Form -->
+            <div class="col-lg-6">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-success text-white">
+                        <h4 class="mb-0">
+                            <i class="fas fa-users me-2"></i>
+                            Bulk Certificates
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="{{ url_for('bulk_issue') }}" enctype="multipart/form-data">
+                            <input type="hidden" name="token" value="{{ token }}">
+                            
+                            <div class="mb-3">
+                                <label for="csvfile" class="form-label">Upload CSV File</label>
+                                <input type="file" class="form-control" id="csvfile" name="csvfile" 
+                                       accept=".csv" required>
+                                <div class="form-text">
+                                    CSV format: name,course,cohort (name is required)
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-success w-100">
+                                <i class="fas fa-file-export me-2"></i>
+                                Generate Bulk Certificates
+                            </button>
+                        </form>
+                        
+                        <hr>
+                        
+                        <div class="text-center">
+                            <a href="{{ url_for('dashboard', token=token) }}" class="btn btn-outline-primary me-2">
+                                <i class="fas fa-tachometer-alt me-1"></i>
+                                Dashboard
+                            </a>
+                            <a href="{{ url_for('verify_home') }}" class="btn btn-outline-info">
+                                <i class="fas fa-check-circle me-1"></i>
+                                Verify Certificates
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security Info -->
+        <div class="card mt-4 border-warning">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0">
+                    <i class="fas fa-shield-alt me-2"></i>
+                    Security Information
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Public Key (Base64):</h6>
+                        <code class="small">{{ vk[:80] }}...</code>
+                        <div class="form-text">Used for signature verification</div>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Features:</h6>
+                        <ul class="small">
+                            <li>Ed25519 cryptographic signatures</li>
+                            <li>QR code verification</li>
+                            <li>Revocation system</li>
+                            <li>Tamper-proof design</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

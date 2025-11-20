@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block title %}Verification Result - Bitcoin Dada{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="text-center mb-4">
+            <h1 class="display-5">
+                <i class="fas fa-check-circle me-2"></i>
+                Certificate Verification
+            </h1>
+        </div>
+
+        <!-- Status Card -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-body text-center py-5">
+                {% if status == "authentic" %}
+                <div class="text-success mb-3">
+                    <i class="fas fa-shield-check fa-4x"></i>
+                </div>
+                <h2 class="text-success">✓ Authentic Certificate</h2>
+                <p class="lead text-muted">{{ message }}</p>
+                {% elif status == "revoked" %}
+                <div class="text-warning mb-3">
+                    <i class="fas fa-exclamation-triangle fa-4x"></i>
+                </div>
+                <h2 class="text-warning">⚠ Certificate Revoked</h2>
+                <p class="lead text-muted">{{ message }}</p>
+                {% elif status == "tampered" %}
+                <div class="text-danger mb-3">
+                    <i class="fas fa-times-circle fa-4x"></i>
+                </div>
+                <h2 class="text-danger">✗ Invalid Certificate</h2>
+                <p class="lead text-muted">{{ message }}</p>
+                {% else %}
+                <div class="text-secondary mb-3">
+                    <i class="fas fa-question-circle fa-4x"></i>
+                </div>
+                <h2 class="text-secondary">Certificate Not Found</h2>
+                <p class="lead text-muted">{{ message }}</p>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if data %}
+        <!-- Certificate Details -->
+        <div class="card shadow-sm">
+            <div class="card-header bg-light">
+                <h5 class="mb-0">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Certificate Details
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <table class="table table-borderless">
+                            <tr>
+                                <th>Name:</th>
+                                <td>{{ data.name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Course:</th>
+                                <td>{{ data.course or 'Not specified' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Cohort:</th>
+                                <td>{{ data.cohort or 'Not specified' }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <table class="table table-borderless">
+                            <tr>
+                                <th>Certificate ID:</th>
+                                <td><code>{{ data.id }}</code></td>
+                            </tr>
+                            <tr>
+                                <th>Issued At:</th>
+                                <td>{{ data.issued_at }}</td>
+                            </tr>
+                            <tr>
+                                <th>Status:</th>
+                                <td>
+                                    {% if status == "authentic" %}
+                                    <span class="badge bg-success">Valid</span>
+                                    {% elif status == "revoked" %}
+                                    <span class="badge bg-warning">Revoked</span>
+                                    {% else %}
+                                    <span class="badge bg-danger">Invalid</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security Info -->
+        <div class="card mt-4 border-info">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-shield-alt me-2"></i>
+                    Security Verification
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Public Key:</h6>
+                        <code class="small">{{ vk[:80] }}...</code>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Verification Method:</h6>
+                        <p class="small">Ed25519 digital signatures with deterministic JSON serialization</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="text-center mt-4">
+            <a href="{{ url_for('verify_home') }}" class="btn btn-primary me-2">
+                <i class="fas fa-check-circle me-1"></i>
+                Verify Another
+            </a>
+            <a href="{{ url_for('upload_verify') }}" class="btn btn-outline-primary">
+                <i class="fas fa-upload me-1"></i>
+                Upload Certificate
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Verify Certificate - Bitcoin Dada{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="text-center mb-5">
+            <h1 class="display-5 text-primary">
+                <i class="fas fa-check-circle me-2"></i>
+                Verify Certificate
+            </h1>
+            <p class="lead">Enter a certificate ID to verify its authenticity</p>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <form method="GET" action="{{ url_for('verify_id', cert_id='') }}" id="verifyForm">
+                    <div class="mb-3">
+                        <label for="cert_id" class="form-label">Certificate ID</label>
+                        <input type="text" class="form-control" id="cert_id" name="cert_id" 
+                               placeholder="Enter certificate UUID" required>
+                        <div class="form-text">
+                            You can find the certificate ID in the PDF or QR code
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-search me-2"></i>
+                        Verify Certificate
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card mt-4 border-info">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-qrcode me-2"></i>
+                    QR Code Verification
+                </h5>
+            </div>
+            <div class="card-body">
+                <p>Scan the QR code on any Bitcoin Dada certificate to verify it instantly.</p>
+                <p class="mb-0 text-muted small">
+                    The QR code contains a direct link to the verification page for that specific certificate.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('verifyForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const certId = document.getElementById('cert_id').value.trim();
+    if (certId) {
+        window.location.href = "{{ url_for('verify_id', cert_id='') }}" + certId;
+    }
+});
+</script>
+{% endblock %}
