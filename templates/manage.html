@@ -1,44 +1,47 @@
 {% extends "base.html" %}
 
-{% block title %}Dashboard - Bitcoin Dada{% endblock %}
+{% block title %}Manage Certificates - Bitcoin Dada{% endblock %}
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="display-5 text-primary">
         <i class="fas fa-tachometer-alt me-2"></i>
-        Certificate Dashboard
+        Manage Certificates
     </h1>
     <div>
-        <a href="{{ url_for('index', token=token) }}" class="btn btn-primary">
-            <i class="fas fa-plus me-1"></i>Issue New
+        <a href="{{ url_for('create_certificate', token=token) }}" class="btn btn-primary me-2">
+            <i class="fas fa-plus me-1"></i>Create Single
+        </a>
+        <a href="{{ url_for('bulk_create', token=token) }}" class="btn btn-success">
+            <i class="fas fa-users me-1"></i>Bulk Create
         </a>
     </div>
 </div>
 
-<!-- Enhanced Stats -->
+<!-- Stats -->
 <div class="row mb-4">
-    <div class="col-md-3">
-        <div class="stats-card bg-primary">
-            <h3>{{ stats.total }}</h3>
-            <p class="mb-0">Total Issued</p>
+    <div class="col-md-4">
+        <div class="card bg-primary text-white">
+            <div class="card-body text-center">
+                <h3>{{ stats.total }}</h3>
+                <p class="mb-0">Total Certificates</p>
+            </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="stats-card bg-success">
-            <h3>{{ stats.active }}</h3>
-            <p class="mb-0">Active</p>
+    <div class="col-md-4">
+        <div class="card bg-success text-white">
+            <div class="card-body text-center">
+                <h3>{{ stats.active }}</h3>
+                <p class="mb-0">Active</p>
+            </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="stats-card bg-warning">
-            <h3>{{ stats.revoked }}</h3>
-            <p class="mb-0">Revoked</p>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="stats-card bitcoin-glow" style="background: var(--bitcoin-orange);">
-            <h3>{{ stats.bitcoin_stamped }}</h3>
-            <p class="mb-0">Bitcoin Stamped</p>
+    <div class="col-md-4">
+        <div class="card bg-warning text-white">
+            <div class="card-body text-center">
+                <h3>{{ stats.revoked }}</h3>
+                <p class="mb-0">Revoked</p>
+            </div>
         </div>
     </div>
 </div>
@@ -46,19 +49,19 @@
 <!-- Certificates Table -->
 <div class="card shadow-sm">
     <div class="card-header bg-light d-flex justify-content-between align-items-center">
-        <h5 class="mb-0">Issued Certificates</h5>
-        <span class="badge bg-primary">{{ rows|length }} total</span>
+        <h5 class="mb-0">All Certificates</h5>
+        <span class="badge bg-primary">{{ rows|length }} certificates</span>
     </div>
     <div class="card-body p-0">
         <div class="table-responsive">
             <table class="table table-hover mb-0">
                 <thead class="table-light">
                     <tr>
-                        <th>ID</th>
+                        <th>Certificate ID</th>
                         <th>Name</th>
                         <th>Course</th>
                         <th>Cohort</th>
-                        <th>Bitcoin</th>
+                        <th>Issued At</th>
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
@@ -68,25 +71,16 @@
                     {% set data = row[1] | fromjson %}
                     <tr>
                         <td>
-                            <small class="font-monospace" data-bs-toggle="tooltip" title="{{ row[0] }}">{{ row[0][:8] }}...</small>
+                            <small class="font-monospace">{{ row[0][:8] }}...</small>
                         </td>
                         <td>{{ data.name }}</td>
                         <td>{{ data.course or '-' }}</td>
                         <td>{{ data.cohort or '-' }}</td>
                         <td>
-                            {% if row[3] %}
-                                <span class="badge bg-success" data-bs-toggle="tooltip" title="Timestamped on Bitcoin">
-                                    <i class="fab fa-bitcoin me-1"></i>Yes
-                                </span>
-                            {% else %}
-                                <a href="{{ url_for('timestamp_to_bitcoin', cert_id=row[0], token=token) }}" 
-                                   class="btn btn-sm btn-outline-warning timestamp-bitcoin">
-                                    <i class="fab fa-bitcoin me-1"></i>Stamp
-                                </a>
-                            {% endif %}
+                            <small>{{ data.issued_at }}</small>
                         </td>
                         <td>
-                            {% if row[2] %}
+                            {% if row[3] %}
                                 <span class="badge bg-danger">Revoked</span>
                             {% else %}
                                 <span class="badge bg-success">Active</span>
@@ -94,29 +88,29 @@
                         </td>
                         <td>
                             <div class="btn-group btn-group-sm">
-                                <a href="{{ url_for('verify_id', cert_id=row[0]) }}" 
-                                   class="btn btn-outline-info" target="_blank" data-bs-toggle="tooltip" title="View">
+                                <a href="{{ url_for('verify_certificate', cert_id=row[0]) }}" 
+                                   class="btn btn-outline-info" target="_blank" title="Verify">
                                     <i class="fas fa-eye"></i>
                                 </a>
-                                <a href="{{ url_for('download', cert_id=row[0], token=token) }}" 
-                                   class="btn btn-outline-primary" data-bs-toggle="tooltip" title="Download PDF">
+                                <a href="{{ url_for('download_certificate', cert_id=row[0], token=token) }}" 
+                                   class="btn btn-outline-primary" title="Download PDF">
                                     <i class="fas fa-download"></i>
                                 </a>
-                                {% if not row[2] %}
-                                <form method="POST" action="{{ url_for('revoke') }}" class="d-inline">
+                                {% if not row[3] %}
+                                <form method="POST" action="{{ url_for('revoke_certificate') }}" class="d-inline">
                                     <input type="hidden" name="token" value="{{ token }}">
                                     <input type="hidden" name="id" value="{{ row[0] }}">
                                     <button type="submit" class="btn btn-outline-warning" 
-                                            onclick="return confirm('Revoke this certificate?')"
-                                            data-bs-toggle="tooltip" title="Revoke">
+                                            onclick="return confirm('Are you sure you want to revoke this certificate?')"
+                                            title="Revoke">
                                         <i class="fas fa-ban"></i>
                                     </button>
                                 </form>
                                 {% else %}
-                                <form method="POST" action="{{ url_for('unrevoke') }}" class="d-inline">
+                                <form method="POST" action="{{ url_for('unrevoke_certificate') }}" class="d-inline">
                                     <input type="hidden" name="token" value="{{ token }}">
                                     <input type="hidden" name="id" value="{{ row[0] }}">
-                                    <button type="submit" class="btn btn-outline-success" data-bs-toggle="tooltip" title="Unrevoke">
+                                    <button type="submit" class="btn btn-outline-success" title="Unrevoke">
                                         <i class="fas fa-check"></i>
                                     </button>
                                 </form>
@@ -128,7 +122,12 @@
                     <tr>
                         <td colspan="7" class="text-center py-4 text-muted">
                             <i class="fas fa-inbox fa-2x mb-2"></i><br>
-                            No certificates issued yet
+                            No certificates created yet
+                            <div class="mt-2">
+                                <a href="{{ url_for('create_certificate', token=token) }}" class="btn btn-primary btn-sm">
+                                    Create Your First Certificate
+                                </a>
+                            </div>
                         </td>
                     </tr>
                     {% endfor %}

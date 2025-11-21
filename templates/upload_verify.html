@@ -42,7 +42,7 @@
             </div>
             <div class="card-body">
                 <p>The JSON file should contain:</p>
-                <pre class="code-block">{
+                <pre class="bg-light p-3 rounded"><code>{
     "id": "certificate-uuid",
     "data": {
         "name": "Student Name",
@@ -51,10 +51,26 @@
         "issued_at": "2024-01-01 12:00:00 UTC"
     },
     "signature": "base64-signature"
-}</pre>
+}</code></pre>
                 <p class="mb-0 text-muted small">
                     You can export this data from the admin dashboard or extract it from a certificate PDF.
                 </p>
+            </div>
+        </div>
+
+        <div class="card mt-4 border-info">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-qrcode me-2"></i>
+                    Alternative Verification
+                </h5>
+            </div>
+            <div class="card-body text-center">
+                <p>Have a certificate ID instead?</p>
+                <a href="{{ url_for('verify_home') }}" class="btn btn-info">
+                    <i class="fas fa-check-circle me-2"></i>
+                    Verify by Certificate ID
+                </a>
             </div>
         </div>
     </div>

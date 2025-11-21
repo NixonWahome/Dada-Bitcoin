@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}Create Certificate - Bitcoin Dada{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="text-center mb-5">
+            <h1 class="display-5 text-primary">
+                <i class="fas fa-certificate me-2"></i>
+                Create Certificate
+            </h1>
+            <p class="lead">Create a secure, digitally signed certificate for Bitcoin Dada students</p>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    <i class="fas fa-user-graduate me-2"></i>
+                    Certificate Information
+                </h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('create_certificate') }}">
+                    <input type="hidden" name="token" value="{{ token }}">
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Student Name *</label>
+                                <input type="text" class="form-control" id="name" name="name" required 
+                                       placeholder="Enter full name">
+                                <div class="form-text">Full name of the student</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="course" class="form-label">Course *</label>
+                                <input type="text" class="form-control" id="course" name="course" required
+                                       placeholder="e.g., Bitcoin Development">
+                                <div class="form-text">Course completed by the student</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="cohort" class="form-label">Cohort *</label>
+                        <input type="text" class="form-control" id="cohort" name="cohort" required
+                               placeholder="e.g., Cohort 2024">
+                        <div class="form-text">Cohort or batch name</div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <h6><i class="fas fa-info-circle me-2"></i>What happens next?</h6>
+                        <ul class="mb-0 small">
+                            <li>A unique certificate ID will be generated</li>
+                            <li>Digital signature will be created using Ed25519 cryptography</li>
+                            <li>QR code will be embedded for easy verification</li>
+                            <li>PDF certificate will be generated and downloaded</li>
+                        </ul>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-lg w-100">
+                        <i class="fas fa-download me-2"></i>
+                        Generate Certificate
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-users fa-2x text-success mb-3"></i>
+                        <h5>Bulk Create</h5>
+                        <p>Create multiple certificates using a CSV file</p>
+                        <a href="{{ url_for('bulk_create', token=token) }}" class="btn btn-success">
+                            <i class="fas fa-file-csv me-2"></i>
+                            Bulk Create
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-tachometer-alt fa-2x text-info mb-3"></i>
+                        <h5>Manage Certificates</h5>
+                        <p>View and manage all issued certificates</p>
+                        <a href="{{ url_for('manage_certificates', token=token) }}" class="btn btn-info">
+                            <i class="fas fa-cog me-2"></i>
+                            Manage
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

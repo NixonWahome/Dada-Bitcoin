@@ -15,7 +15,7 @@
 
         <div class="card shadow-sm">
             <div class="card-body">
-                <form method="GET" action="{{ url_for('verify_id', cert_id='') }}" id="verifyForm">
+                <form method="GET" action="" id="verifyForm">
                     <div class="mb-3">
                         <label for="cert_id" class="form-label">Certificate ID</label>
                         <input type="text" class="form-control" id="cert_id" name="cert_id" 
@@ -47,6 +47,22 @@
                 </p>
             </div>
         </div>
+
+        <div class="card mt-4 border-warning">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0">
+                    <i class="fas fa-upload me-2"></i>
+                    Alternative Verification
+                </h5>
+            </div>
+            <div class="card-body text-center">
+                <p>Have a certificate JSON file instead?</p>
+                <a href="{{ url_for('upload_verify') }}" class="btn btn-warning">
+                    <i class="fas fa-upload me-2"></i>
+                    Upload Certificate File
+                </a>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -55,7 +71,7 @@ document.getElementById('verifyForm').addEventListener('submit', function(e) {
     e.preventDefault();
     const certId = document.getElementById('cert_id').value.trim();
     if (certId) {
-        window.location.href = "{{ url_for('verify_id', cert_id='') }}" + certId;
+        window.location.href = "/verify/" + certId;
     }
 });
 </script>

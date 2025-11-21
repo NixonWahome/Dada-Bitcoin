@@ -5,6 +5,13 @@
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-lg-6">
+        <div class="text-center mb-5">
+            <h1 class="display-5 text-danger">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                Error
+            </h1>
+        </div>
+
         <div class="card shadow-sm border-danger">
             <div class="card-body text-center py-5">
                 <div class="text-danger mb-4">
@@ -13,8 +20,11 @@
                 <h2 class="text-danger">{{ error }}</h2>
                 <p class="lead text-muted">{{ message }}</p>
                 <div class="mt-4">
-                    <a href="{{ url_for('index') }}" class="btn btn-primary">
+                    <a href="{{ url_for('index') }}" class="btn btn-primary me-2">
                         <i class="fas fa-home me-2"></i>Return Home
+                    </a>
+                    <a href="{{ url_for('verify_home') }}" class="btn btn-outline-primary">
+                        <i class="fas fa-check-circle me-2"></i>Verify Certificate
                     </a>
                 </div>
             </div>

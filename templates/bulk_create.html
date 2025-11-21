@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Bulk Create Certificates - Bitcoin Dada{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="text-center mb-5">
+            <h1 class="display-5 text-success">
+                <i class="fas fa-users me-2"></i>
+                Bulk Create Certificates
+            </h1>
+            <p class="lead">Create multiple certificates using a CSV file</p>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0">
+                    <i class="fas fa-file-csv me-2"></i>
+                    Upload CSV File
+                </h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('bulk_create') }}" enctype="multipart/form-data">
+                    <input type="hidden" name="token" value="{{ token }}">
+                    
+                    <div class="mb-4">
+                        <label for="csvfile" class="form-label">Select CSV File</label>
+                        <input type="file" class="form-control" id="csvfile" name="csvfile" 
+                               accept=".csv" required>
+                        <div class="form-text">
+                            Upload a CSV file with student information
+                        </div>
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <h6><i class="fas fa-exclamation-triangle me-2"></i>CSV Format Requirements</h6>
+                        <ul class="mb-0 small">
+                            <li><strong>Required columns:</strong> name, course, cohort</li>
+                            <li><strong>Optional:</strong> Any additional columns will be ignored</li>
+                            <li><strong>Encoding:</strong> UTF-8 recommended</li>
+                            <li><strong>First row:</strong> Should contain column headers</li>
+                        </ul>
+                    </div>
+
+                    <div class="mb-4">
+                        <h6>Example CSV Format:</h6>
+                        <pre class="bg-light p-3 rounded"><code>name,course,cohort
+John Doe,Bitcoin Development,Cohort 2024
+Jane Smith,Lightning Network,Cohort 2024
+Alice Johnson,Bitcoin Basics,Cohort 2023</code></pre>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-success btn-lg w-100">
+                        <i class="fas fa-file-export me-2"></i>
+                        Generate Certificates
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{{ url_for('create_certificate', token=token) }}" class="btn btn-outline-primary me-2">
+                <i class="fas fa-user me-2"></i>
+                Single Certificate
+            </a>
+            <a href="{{ url_for('manage_certificates', token=token) }}" class="btn btn-outline-info">
+                <i class="fas fa-tachometer-alt me-2"></i>
+                Manage Certificates
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

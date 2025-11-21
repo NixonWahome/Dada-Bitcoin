@@ -6,7 +6,35 @@
     <title>{% block title %}Bitcoin Dada Certificate System{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    <style>
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 0;
+            border-radius: 0 0 30px 30px;
+            margin-bottom: 2rem;
+        }
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+            color: white;
+        }
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -19,7 +47,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav me-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('index') }}">
                             <i class="fas fa-home me-1"></i>Home
@@ -30,18 +58,35 @@
                             <i class="fas fa-check-circle me-1"></i>Verify
                         </a>
                     </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-plus me-1"></i>Create
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="{{ url_for('create_certificate') }}">
+                                    <i class="fas fa-user me-2"></i>Single Certificate
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ url_for('bulk_create') }}">
+                                    <i class="fas fa-users me-2"></i>Bulk Create
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('manage_certificates') }}">
+                            <i class="fas fa-tachometer-alt me-1"></i>Manage
+                        </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('upload_verify') }}">
                             <i class="fas fa-upload me-1"></i>Upload Verify
                         </a>
                     </li>
-                    {% if request.args.get('token') == ADMIN_TOKEN %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('dashboard', token=ADMIN_TOKEN) }}">
-                            <i class="fas fa-tachometer-alt me-1"></i>Dashboard
-                        </a>
-                    </li>
-                    {% endif %}
                 </ul>
             </div>
         </div>
@@ -70,6 +115,21 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script>
+        // Simple JavaScript for form handling
+        document.addEventListener('DOMContentLoaded', function() {
+            // Verify form handling
+            const verifyForm = document.getElementById('verifyForm');
+            if (verifyForm) {
+                verifyForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const certId = document.getElementById('cert_id').value.trim();
+                    if (certId) {
+                        window.location.href = "/verify/" + certId;
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>
