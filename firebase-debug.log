@@ -1,0 +1,165 @@
+[debug] [2025-11-24T02:30:16.924Z] ----------------------------------------------------------------------
+[debug] [2025-11-24T02:30:16.954Z] Command:       C:\nvm4w\nodejs\node.exe C:\Users\Overkill\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2025-11-24T02:30:16.955Z] CLI Version:   14.11.1
+[debug] [2025-11-24T02:30:16.955Z] Platform:      win32
+[debug] [2025-11-24T02:30:16.956Z] Node Version:  v20.19.4
+[debug] [2025-11-24T02:30:16.956Z] Time:          Mon Nov 24 2025 05:30:16 GMT+0300 (East Africa Time)
+[debug] [2025-11-24T02:30:16.957Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-11-24T02:30:16.963Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[debug] [2025-11-24T02:30:17.232Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-11-24T02:30:17.232Z] > authorizing via signed-in user (nixonwahome40@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\Overkill\Downloads\dadabitcoin
+
+[debug] [2025-11-24T02:30:18.012Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
+[debug] [2025-11-24T02:30:18.013Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[info] i  If you want to create a project in a Google Cloud organization or folder, please use "firebase projects:create" instead, and return to this command when you've created the project. 
+[debug] [2025-11-24T02:30:49.417Z] Checked if tokens are valid: false, expires at: 1761074263032
+[debug] [2025-11-24T02:30:49.417Z] Checked if tokens are valid: false, expires at: 1761074263032
+[debug] [2025-11-24T02:30:49.418Z] > refreshing access token with scopes: []
+[debug] [2025-11-24T02:30:49.421Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-11-24T02:30:49.421Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-11-24T02:30:49.942Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-11-24T02:30:49.942Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-11-24T02:30:49.984Z] >>> [apiv2][query] POST https://firebase.googleapis.com/v1/projects:checkProjectId [none]
+[debug] [2025-11-24T02:30:49.984Z] >>> [apiv2][body] POST https://firebase.googleapis.com/v1/projects:checkProjectId {"proposedId":"Bitcoindada"}
+[debug] [2025-11-24T02:30:50.779Z] <<< [apiv2][status] POST https://firebase.googleapis.com/v1/projects:checkProjectId 200
+[debug] [2025-11-24T02:30:50.780Z] <<< [apiv2][body] POST https://firebase.googleapis.com/v1/projects:checkProjectId {"projectIdStatus":"PROJECT_ID_NOT_VALID","suggestedProjectId":"bitcoindada-e4107"}
+[debug] [2025-11-24T02:30:53.112Z] Checked if tokens are valid: true, expires at: 1763955048942
+[debug] [2025-11-24T02:30:53.112Z] Checked if tokens are valid: true, expires at: 1763955048942
+[debug] [2025-11-24T02:30:53.115Z] >>> [apiv2][query] POST https://firebase.googleapis.com/v1/projects:checkProjectId [none]
+[debug] [2025-11-24T02:30:53.115Z] >>> [apiv2][body] POST https://firebase.googleapis.com/v1/projects:checkProjectId {"proposedId":"Bitcoindada"}
+[debug] [2025-11-24T02:30:53.700Z] <<< [apiv2][status] POST https://firebase.googleapis.com/v1/projects:checkProjectId 200
+[debug] [2025-11-24T02:30:53.701Z] <<< [apiv2][body] POST https://firebase.googleapis.com/v1/projects:checkProjectId {"projectIdStatus":"PROJECT_ID_NOT_VALID","suggestedProjectId":"bitcoindada-98a00"}
+[debug] [2025-11-24T02:31:00.804Z] Checked if tokens are valid: true, expires at: 1763955048942
+[debug] [2025-11-24T02:31:00.804Z] Checked if tokens are valid: true, expires at: 1763955048942
+[debug] [2025-11-24T02:31:00.806Z] >>> [apiv2][query] POST https://firebase.googleapis.com/v1/projects:checkProjectId [none]
+[debug] [2025-11-24T02:31:00.806Z] >>> [apiv2][body] POST https://firebase.googleapis.com/v1/projects:checkProjectId {"proposedId":"bithhhhh"}
+[debug] [2025-11-24T02:31:01.318Z] <<< [apiv2][status] POST https://firebase.googleapis.com/v1/projects:checkProjectId 200
+[debug] [2025-11-24T02:31:01.318Z] <<< [apiv2][body] POST https://firebase.googleapis.com/v1/projects:checkProjectId {"projectIdStatus":"PROJECT_ID_AVAILABLE","suggestedProjectId":"bithhhhh"}
+[debug] [2025-11-24T02:31:03.432Z] Checked if tokens are valid: true, expires at: 1763955048942
+[debug] [2025-11-24T02:31:03.432Z] Checked if tokens are valid: true, expires at: 1763955048942
+[debug] [2025-11-24T02:31:03.432Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects [none]
+[debug] [2025-11-24T02:31:03.432Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects {"projectId":"bithhhhh","name":"bithhhhh"}
+[debug] [2025-11-24T02:31:05.260Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects 200
+[debug] [2025-11-24T02:31:05.261Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects {"name":"operations/create_project.global.7807039857849060910"}
+[debug] [2025-11-24T02:31:05.266Z] Checked if tokens are valid: true, expires at: 1763955048942
+[debug] [2025-11-24T02:31:05.266Z] Checked if tokens are valid: true, expires at: 1763955048942
+[debug] [2025-11-24T02:31:05.267Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/operations/create_project.global.7807039857849060910 [none]
+[debug] [2025-11-24T02:31:06.552Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/operations/create_project.global.7807039857849060910 200
+[debug] [2025-11-24T02:31:06.552Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/operations/create_project.global.7807039857849060910 {"name":"operations/create_project.global.7807039857849060910","metadata":{"@type":"type.googleapis.com/google.cloudresourcemanager.v1.ProjectCreationStatus","ready":true},"done":true,"error":{"code":8,"message":"The project cannot be created because you have exceeded your allotted project quota.","details":[{"@type":"type.googleapis.com/google.rpc.QuotaFailure","violations":[{"description":"The project cannot be created because you have exceeded your allotted project quota."}]}]}}
+[debug] [2025-11-24T02:31:07.249Z] FirebaseError: The project cannot be created because you have exceeded your allotted project quota.
+    at OperationPoller.poll (C:\Users\Overkill\AppData\Roaming\npm\node_modules\firebase-tools\lib\operation-poller.js:24:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async createCloudProject (C:\Users\Overkill\AppData\Roaming\npm\node_modules\firebase-tools\lib\management\projects.js:215:29)
+    at async createFirebaseProjectAndLog (C:\Users\Overkill\AppData\Roaming\npm\node_modules\firebase-tools\lib\management\projects.js:83:9)
+    at async promptAndCreateNewProject (C:\Users\Overkill\AppData\Roaming\npm\node_modules\firebase-tools\lib\init\features\project.js:31:12)
+    at async Object.doSetup (C:\Users\Overkill\AppData\Roaming\npm\node_modules\firebase-tools\lib\init\features\project.js:85:31)
+    at async init (C:\Users\Overkill\AppData\Roaming\npm\node_modules\firebase-tools\lib\init\index.js:62:13)
+    at async Command.initAction [as actionFn] (C:\Users\Overkill\AppData\Roaming\npm\node_modules\firebase-tools\lib\commands\init.js:205:5)
+[error] 
+[error] Error: Failed to create project. See firebase-debug.log for more info.
+[debug] [2025-11-24T02:31:15.068Z] ----------------------------------------------------------------------
+[debug] [2025-11-24T02:31:15.071Z] Command:       C:\nvm4w\nodejs\node.exe C:\Users\Overkill\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2025-11-24T02:31:15.072Z] CLI Version:   14.11.1
+[debug] [2025-11-24T02:31:15.072Z] Platform:      win32
+[debug] [2025-11-24T02:31:15.072Z] Node Version:  v20.19.4
+[debug] [2025-11-24T02:31:15.072Z] Time:          Mon Nov 24 2025 05:31:15 GMT+0300 (East Africa Time)
+[debug] [2025-11-24T02:31:15.073Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-11-24T02:31:15.082Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-11-24T02:31:15.083Z] > authorizing via signed-in user (nixonwahome40@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\Overkill\Downloads\dadabitcoin
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[info] i  If you want to create a project in a Google Cloud organization or folder, please use "firebase projects:create" instead, and return to this command when you've created the project. 
+[debug] [2025-11-24T02:31:41.852Z] Checked if tokens are valid: true, expires at: 1763955048942
+[debug] [2025-11-24T02:31:41.852Z] Checked if tokens are valid: true, expires at: 1763955048942
+[debug] [2025-11-24T02:31:41.856Z] >>> [apiv2][query] POST https://firebase.googleapis.com/v1/projects:checkProjectId [none]
+[debug] [2025-11-24T02:31:41.857Z] >>> [apiv2][body] POST https://firebase.googleapis.com/v1/projects:checkProjectId {"proposedId":"Bitcoindad333344"}
+[debug] [2025-11-24T02:31:42.515Z] <<< [apiv2][status] POST https://firebase.googleapis.com/v1/projects:checkProjectId 200
+[debug] [2025-11-24T02:31:42.515Z] <<< [apiv2][body] POST https://firebase.googleapis.com/v1/projects:checkProjectId {"projectIdStatus":"PROJECT_ID_NOT_VALID","suggestedProjectId":"bitcoindad333344"}
+[debug] [2025-11-24T02:31:58.650Z] Checked if tokens are valid: true, expires at: 1763955048942
+[debug] [2025-11-24T02:31:58.650Z] Checked if tokens are valid: true, expires at: 1763955048942
+[debug] [2025-11-24T02:31:58.652Z] >>> [apiv2][query] POST https://firebase.googleapis.com/v1/projects:checkProjectId [none]
+[debug] [2025-11-24T02:31:58.652Z] >>> [apiv2][body] POST https://firebase.googleapis.com/v1/projects:checkProjectId {"proposedId":"bitcoindad333344."}
+[debug] [2025-11-24T02:31:58.975Z] <<< [apiv2][status] POST https://firebase.googleapis.com/v1/projects:checkProjectId 400
+[debug] [2025-11-24T02:31:58.975Z] <<< [apiv2][body] POST https://firebase.googleapis.com/v1/projects:checkProjectId {"error":{"code":400,"message":"Request contains an invalid argument.","status":"INVALID_ARGUMENT"}}
+[debug] [2025-11-24T02:31:58.977Z] Couldn't check if project ID bitcoindad333344. is available. Original error: FirebaseError: Failed to check if project ID is available. See firebase-debug.log for more info.
+[debug] [2025-11-24T02:32:00.262Z] Checked if tokens are valid: true, expires at: 1763955048942
+[debug] [2025-11-24T02:32:00.262Z] Checked if tokens are valid: true, expires at: 1763955048942
+[debug] [2025-11-24T02:32:00.263Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects [none]
+[debug] [2025-11-24T02:32:00.263Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects {"projectId":"bitcoindad333344.","name":"bitcoindad333344."}
+[debug] [2025-11-24T02:32:01.698Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects 400
+[debug] [2025-11-24T02:32:01.702Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects {"error":{"code":400,"message":"Request contains an invalid argument.","status":"INVALID_ARGUMENT","details":[{"@type":"type.googleapis.com/google.rpc.BadRequest","fieldViolations":[{"field":"project_id","description":"project_id contains invalid characters"},{"field":"display_name","description":"project display name contains invalid characters"}]},{"@type":"type.googleapis.com/google.rpc.Help","links":[{"url":"https://cloud.google.com/resource-manager/reference/rest/v1/projects"}]}]}}
+[debug] [2025-11-24T02:32:02.030Z] FirebaseError: Request to https://cloudresourcemanager.googleapis.com/v1/projects had HTTP Error: 400, Request contains an invalid argument.
+    at responseToError (C:\Users\Overkill\AppData\Roaming\npm\node_modules\firebase-tools\lib\responseToError.js:52:12)
+    at RetryOperation._fn (C:\Users\Overkill\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:312:77)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[error] 
+[error] Error: Failed to create project. See firebase-debug.log for more info.
+[debug] [2025-11-24T02:32:13.782Z] ----------------------------------------------------------------------
+[debug] [2025-11-24T02:32:13.789Z] Command:       C:\nvm4w\nodejs\node.exe C:\Users\Overkill\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2025-11-24T02:32:13.790Z] CLI Version:   14.11.1
+[debug] [2025-11-24T02:32:13.792Z] Platform:      win32
+[debug] [2025-11-24T02:32:13.792Z] Node Version:  v20.19.4
+[debug] [2025-11-24T02:32:13.792Z] Time:          Mon Nov 24 2025 05:32:13 GMT+0300 (East Africa Time)
+[debug] [2025-11-24T02:32:13.793Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-11-24T02:32:13.811Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-11-24T02:32:13.812Z] > authorizing via signed-in user (nixonwahome40@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\Overkill\Downloads\dadabitcoin
+
+[debug] [2025-11-24T02:40:42.122Z] ExitPromptError: User force closed the prompt with SIGINT
+    at Interface.sigint (C:\Users\Overkill\AppData\Roaming\npm\node_modules\firebase-tools\node_modules\@inquirer\core\dist\commonjs\lib\create-prompt.js:101:37)
+    at Interface.emit (node:events:524:28)
+    at Interface.emit (node:domain:489:12)
+    at [_ttyWrite] [as _ttyWrite] (node:internal/readline/interface:1125:18)
+    at ReadStream.onkeypress (node:internal/readline/interface:264:20)
+    at ReadStream.emit (node:events:536:35)
+    at ReadStream.emit (node:domain:489:12)
+    at emitKeys (node:internal/readline/utils:371:14)
+    at emitKeys.next (<anonymous>)
+    at ReadStream.onData (node:internal/readline/emitKeypressEvents:64:36)
+[error] 
+[error] Error: An unexpected error has occurred.

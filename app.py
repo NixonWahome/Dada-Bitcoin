@@ -1,6 +1,7 @@
 """
 Bitcoin Dada / DadaDevs Certificate Signature System
 COMPLETE MVP - NO ADMIN AUTHENTICATION
+SUPABASE VERSION WITH AUTO-SETUP GUIDANCE
 """
 
 import os
@@ -8,7 +9,6 @@ import io
 import csv
 import json
 import base64
-import sqlite3
 import uuid
 from datetime import datetime, timezone
 from dotenv import load_dotenv
@@ -23,71 +23,186 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import landscape, A4
 from reportlab.lib.utils import ImageReader
 
+# Supabase import
+from supabase import create_client, Client
+
 # Load environment variables
 load_dotenv()
 
 # Configuration
 APP_HOST = os.environ.get("APP_HOST", "0.0.0.0")
 APP_PORT = int(os.environ.get("APP_PORT", 5000))
-DB_PATH = os.environ.get("DB_PATH", "certs.db")
 KEY_FILE = os.environ.get("KEY_FILE", "signing_key.base64")
 FLASK_SECRET = os.environ.get("FLASK_SECRET", "production-secret-change-me")
 
-# Database Functions
+# Supabase configuration - hardcoded for testing
+SUPABASE_URL = "https://kqqrwkqjejsncbgnewcw.supabase.co"
+SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtxcXJ3a3FqZWpzbmNiZ25ld2N3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM5NDYzMzQsImV4cCI6MjA3OTUyMjMzNH0.xkkv3AJAIffvA_voi806HVcdYBfbrLsxNvHLcebS50g"
+
+# Initialize Supabase
+try:
+    supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+    print("✅ Supabase initialized successfully")
+except Exception as e:
+    print(f"❌ Supabase initialization failed: {e}")
+    raise
+
+# Database Functions with auto-setup guidance
+def check_table_exists():
+    """Check if the certs table exists and has correct schema"""
+    try:
+        # Try a simple query to check if table exists
+        response = supabase.table("certs").select("id").limit(1).execute()
+        return True
+    except Exception as e:
+        if "Could not find the table" in str(e) or "PGRST205" in str(e):
+            return False
+        # If it's another error, the table might exist but have wrong schema
+        return True
+
+def setup_database():
+    """Guide user through database setup"""
+    print("\n" + "="*60)
+    print("🔧 DATABASE SETUP REQUIRED")
+    print("="*60)
+    print("The 'certs' table needs to be created in your Supabase project.")
+    print("\n📋 Please follow these steps:")
+    print("1. Go to: https://kqqrwkqjejsncbgnewcw.supabase.co")
+    print("2. Click 'SQL Editor' in the left sidebar")
+    print("3. Copy and paste this SQL query:")
+    print("\n" + "-"*40)
+    print("""
+CREATE TABLE certs (
+  id TEXT PRIMARY KEY,
+  data TEXT NOT NULL,
+  signature TEXT NOT NULL,
+  revoked BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW())
+);
+
+-- Optional: Enable Row Level Security
+ALTER TABLE certs ENABLE ROW LEVEL SECURITY;
+
+-- Optional: Create policies for public access
+CREATE POLICY "Allow public read access" ON certs FOR SELECT USING (true);
+CREATE POLICY "Allow public insert access" ON certs FOR INSERT WITH CHECK (true);
+CREATE POLICY "Allow public update access" ON certs FOR UPDATE USING (true);
+    """)
+    print("-"*40)
+    print("\n4. Click 'Run' to execute the query")
+    print("5. Wait a few seconds for the table to be created")
+    print("6. Refresh this application")
+    print("="*60 + "\n")
+    return False
+
+def safe_db_operation(operation, fallback_value=None, operation_name=""):
+    """Wrapper to handle database operations safely"""
+    try:
+        return operation()
+    except Exception as e:
+        if "Could not find the table" in str(e) or "PGRST205" in str(e):
+            if not hasattr(safe_db_operation, 'setup_guided'):
+                safe_db_operation.setup_guided = True
+                setup_database()
+            return fallback_value
+        elif "invalid input syntax for type bigint" in str(e):
+            print(f"\n❌ DATABASE SCHEMA ERROR: {operation_name}")
+            print("💡 The 'certs' table exists but has the wrong schema!")
+            print("🔧 Please DROP the existing table and recreate it with:")
+            print("""
+DROP TABLE IF EXISTS certs;
+CREATE TABLE certs (
+  id TEXT PRIMARY KEY,
+  data TEXT NOT NULL,
+  signature TEXT NOT NULL,
+  revoked BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW())
+);
+            """)
+            return fallback_value
+        else:
+            print(f"❌ Database error in {operation_name}: {e}")
+            return fallback_value
+
 def init_db():
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    c.execute('''
-        CREATE TABLE IF NOT EXISTS certs (
-            id TEXT PRIMARY KEY,
-            data TEXT,
-            signature TEXT,
-            revoked INTEGER DEFAULT 0,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )''')
-    conn.commit()
-    conn.close()
+    """Initialize database by checking if table exists"""
+    if not check_table_exists():
+        setup_database()
+    else:
+        print("✅ Database table check passed")
 
 def db_insert(cert_id, data_json, signature_b64):
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    c.execute("INSERT INTO certs (id, data, signature) VALUES (?, ?, ?)",
-              (cert_id, data_json, signature_b64))
-    conn.commit()
-    conn.close()
+    def operation():
+        response = supabase.table("certs").insert({
+            "id": cert_id,
+            "data": data_json,
+            "signature": signature_b64,
+            "revoked": False
+        }).execute()
+        
+        if hasattr(response, 'error') and response.error:
+            raise Exception(f"Supabase insert error: {response.error}")
+        return response
+    
+    return safe_db_operation(operation, None, "db_insert")
 
 def db_get(cert_id):
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    c.execute("SELECT data, signature, revoked FROM certs WHERE id=?", (cert_id,))
-    row = c.fetchone()
-    conn.close()
-    return row
+    def operation():
+        response = supabase.table("certs").select("*").eq("id", cert_id).execute()
+        
+        if hasattr(response, 'data') and response.data:
+            data = response.data[0]
+            return (
+                data.get('data'),
+                data.get('signature'),
+                data.get('revoked', False)
+            )
+        return None
+    
+    return safe_db_operation(operation, None, "db_get")
 
 def db_list_all():
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    c.execute("SELECT id, data, signature, revoked FROM certs ORDER BY rowid DESC")
-    rows = c.fetchall()
-    conn.close()
-    return rows
+    def operation():
+        response = supabase.table("certs").select("*").order("created_at", desc=True).execute()
+        
+        rows = []
+        if hasattr(response, 'data') and response.data:
+            for item in response.data:
+                rows.append((
+                    item.get('id'),
+                    item.get('data'),
+                    item.get('signature'),
+                    item.get('revoked', False)
+                ))
+        return rows
+    
+    return safe_db_operation(operation, [], "db_list_all")
 
 def db_set_revoked(cert_id, revoked=True):
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    c.execute("UPDATE certs SET revoked=? WHERE id=?", (1 if revoked else 0, cert_id))
-    conn.commit()
-    conn.close()
+    def operation():
+        response = supabase.table("certs").update({
+            "revoked": revoked
+        }).eq("id", cert_id).execute()
+        
+        if hasattr(response, 'error') and response.error:
+            raise Exception(f"Supabase update error: {response.error}")
+        return response
+    
+    return safe_db_operation(operation, None, "db_set_revoked")
 
 def db_stats():
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    c.execute("SELECT COUNT(*) FROM certs")
-    total = c.fetchone()[0]
-    c.execute("SELECT COUNT(*) FROM certs WHERE revoked=1")
-    revoked = c.fetchone()[0]
-    conn.close()
-    return {"total": total, "revoked": revoked, "active": total - revoked}
+    def operation():
+        # Get total count
+        total_response = supabase.table("certs").select("id", count="exact").execute()
+        total = len(total_response.data) if hasattr(total_response, 'data') else 0
+        
+        # Get revoked count
+        revoked_response = supabase.table("certs").select("id").eq("revoked", True).execute()
+        revoked = len(revoked_response.data) if hasattr(revoked_response, 'data') else 0
+        
+        return {"total": total, "revoked": revoked, "active": total - revoked}
+    
+    return safe_db_operation(operation, {"total": 0, "revoked": 0, "active": 0}, "db_stats")
 
 # Signing Keys
 def load_or_create_key():
@@ -123,7 +238,7 @@ sk = load_or_create_key()
 vk = sk.verify_key
 VK_B64 = base64.b64encode(vk.encode()).decode()
 
-# PDF Generation
+# PDF Generation (unchanged)
 def create_certificate_pdf(data: dict, signature_b64: str, verify_url: str) -> bytes:
     buffer = io.BytesIO()
     width, height = landscape(A4)
@@ -217,7 +332,10 @@ def create_certificate():
         sig_b64 = base64.b64encode(sig).decode()
 
         # Save to database
-        db_insert(cert_id, json.dumps(data), sig_b64)
+        result = db_insert(cert_id, json.dumps(data), sig_b64)
+        if result is None:
+            flash("Database not ready. Please follow the setup instructions above.", "error")
+            return redirect(url_for('create_certificate'))
 
         # Generate PDF with QR code
         verify_url = request.url_root.rstrip("/") + url_for("verify_certificate", cert_id=cert_id)
@@ -232,6 +350,10 @@ def create_certificate():
     except Exception as e:
         flash(f"Error creating certificate: {str(e)}", "error")
         return redirect(url_for('create_certificate'))
+
+# ... (all other routes remain exactly the same as in your previous code)
+# [Include all the other routes: bulk_create, verify, upload_verify, manage, revoke, unrevoke, download, api_certificate]
+# They will automatically use the safe_db_operation wrapper
 
 @app.route("/bulk_create", methods=["GET", "POST"])
 def bulk_create():
@@ -290,7 +412,11 @@ def bulk_create():
                     sig = sk.sign(payload).signature
                     sig_b64 = base64.b64encode(sig).decode()
                     
-                    db_insert(cert_id, json.dumps(data), sig_b64)
+                    result = db_insert(cert_id, json.dumps(data), sig_b64)
+                    if result is None:
+                        flash(f"Database not ready. Skipping row {row_num}.", "warning")
+                        continue
+                        
                     verify_url = request.url_root.rstrip("/") + url_for("verify_certificate", cert_id=cert_id)
                     pdf_bytes = create_certificate_pdf(data, sig_b64, verify_url)
                     
@@ -303,11 +429,15 @@ def bulk_create():
                     continue
 
         zip_io.seek(0)
-        flash(f"Successfully created {created_count} certificates!", "success")
-        return send_file(zip_io, 
-                        mimetype="application/zip", 
-                        as_attachment=True, 
-                        download_name="bitcoin_dada_certificates.zip")
+        if created_count > 0:
+            flash(f"Successfully created {created_count} certificates!", "success")
+            return send_file(zip_io, 
+                            mimetype="application/zip", 
+                            as_attachment=True, 
+                            download_name="bitcoin_dada_certificates.zip")
+        else:
+            flash("No certificates were created. Please check database setup.", "error")
+            return redirect(url_for('bulk_create'))
                         
     except Exception as e:
         flash(f"Error processing bulk creation: {str(e)}", "error")
@@ -494,4 +624,5 @@ if __name__ == "__main__":
     print(f"📝 Create certificates: http://{APP_HOST}:{APP_PORT}/create")
     print(f"🔍 Verify certificates: http://{APP_HOST}:{APP_PORT}/verify")
     print(f"📊 Manage certificates: http://{APP_HOST}:{APP_PORT}/manage")
+    print(f"🗄️  Using Supabase as database: {SUPABASE_URL}")
     app.run(host=APP_HOST, port=APP_PORT, debug=True)
